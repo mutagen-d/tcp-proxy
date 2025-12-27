@@ -1,0 +1,19 @@
+{
+  "name": "tcp-proxy",
+  "version": "1.0.0",
+  "description": "simple tcp proxy server",
+  "main": "src/local.js",
+  "scripts": {
+    "local": "node src/local.js",
+    "remote": "node src/remote.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mutagen-d/node-proxy-server": "^1.1.0",
+    "dotenv": "^17.2.3",
+    "msgpackr": "^1.11.8"
+  }
+}
