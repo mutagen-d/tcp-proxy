@@ -1,4 +1,4 @@
-# Proxy server with tcp tunneling (multiplexing)
+# Proxy server with tcp tunneling (without multiplexing)
 
 This is a proxy server that tunnels traffic through tcp connections.
 It has 2 parts: a local proxy server (handles socks & http) and a remote tcp server (relays traffic).
