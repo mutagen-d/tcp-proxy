@@ -22,6 +22,9 @@ const server = createProxyServer({
         err ? defer.reject(err) : defer.resolve()
       })
     })
+    socket.on('error', (error) => {
+      console.log(time(), 'ERROR', error)
+    })
     await defer.promise
     console.log(time(), `${options.dstHost}:${options.dstPort} +${Date.now() - timestamp}ms`)
     socket.detach()

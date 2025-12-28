@@ -13,10 +13,13 @@ server.on('connection', (socket) => {
   socket.on('close', () => {
     console.log(time(), 'DISCONNECT', socket._url || '', ip)
   })
+  socket.on('error', (error) => {
+    console.log(time(), 'ERROR(0)', socket._url || '', ip, error)
+  })
   const sock = new SocketBase(socket)
   sock.connected = true;
   sock.on('error', (error) => {
-    console.log(time(), 'error', ip, error)
+    console.log(time(), 'ERROR(1)', socket._url || '', ip, error)
   })
   sock.on('proxy-stream', (options, callback) => {
     sock.detach()
