@@ -84,6 +84,7 @@ class SocketBase {
     }
     this.destroy()
     this.disconnected = true;
+    this.connected = false
   }
 
   /** @private */

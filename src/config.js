@@ -7,6 +7,7 @@ const config = {
   localPort: +(process.env.LOCAL_PROXY_PORT || 8025),
   remoteUrl: process.env.REMOTE_SERVER_URL || 'http://localhost:8015',
   remotePort: +(process.env.REMOTE_SERVER_PORT || 8015),
+  multiplex: process.env.MULTIPLEX === 'true',
 }
 
 if (!config.secret) {
