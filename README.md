@@ -1,4 +1,4 @@
-# Proxy server with tcp tunneling (without multiplexing)
+# Proxy server with tcp tunneling (with optional multiplexing)
 
 This is a proxy server that tunnels traffic through tcp connections.
 It has 2 parts: a local proxy server (handles socks & http) and a remote tcp server (relays traffic).
@@ -13,6 +13,7 @@ REMOTE_SERVER_PORT - remote server port
 AES_SECRET - secret for aes encryption/decryption (keep it secret)
 AES_ALGORITHM - eas algorigtmm (optional)
 AES_IV_LENGTH - initialization vector length (optional)
+MULTIPLEX - set to "true" to use multiplex features (optional)
 ```
 
 ## Install
