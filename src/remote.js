@@ -1,6 +1,7 @@
 const net = require('net')
 const config = require('./config');
 const { SocketBase } = require('./tools/socket-base');
+const { fakeHeader } = require('./tools/fake-header');
 
 const port = config.remotePort;
 const time = () => new Date().toISOString()
@@ -20,6 +21,7 @@ server.on('connection', (socket) => {
   sock.connected = true;
   sock.on('error', (error) => {
     console.log(time(), 'ERROR(1)', socket._url || '', ip, error)
+    socket.end(fakeHeader.response(), 'utf-8')
   })
   sock.on('proxy-stream', (options, callback) => {
     sock.detach()

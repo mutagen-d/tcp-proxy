@@ -144,12 +144,14 @@ class SocketBase {
       this.events.emit(event, ...args)
     } catch (e) {
       console.log('Warning!', e)
+      this.emit('error', e)
     }
   }
 
   emit(event, ...args) {
     if (events.includes(event)) {
-      return super.emit(event, ...args)
+      // return super.emit(event, ...args)
+      return this.events.emit(event, ...args)
     }
     if (args.length && typeof args[args.length - 1] === 'function') {
       /** @type {Function} */
