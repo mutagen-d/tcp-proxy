@@ -1,4 +1,7 @@
+const crypto = require('crypto')
 const config = require('../config')
+const { randomUrl } = require('./random-url')
+const { randomMethod } = require('./random-method')
 
 const LF = '\n'.charCodeAt(0)
 const CR = '\r'.charCodeAt(0)
@@ -11,15 +14,30 @@ const getHost = () => {
 }
 const HOST = getHost() || 'example.com';
 
-const REQUEST_HEADERS = [
-  'POST /api/files HTTP/1.1',
-  `Host: ${HOST}`,
-  'User-Agent: curl/7.81.0',
-  'Content-Type: octet/stream',
-  'Accept: */*',
-  SEP,
-]
-const REQUEST_HEADERS_BUFFER = Buffer.from(REQUEST_HEADERS.join(SEP), 'utf-8')
+/**
+ * @param {{
+ *  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'HEAD'
+ *  contentLength?: number | string
+ *  userAgent?: string
+ * }} [opts]
+ */
+const REQUEST_HEADERS = (opts) => {
+  opts = opts || {}
+  const method = opts.method || randomMethod()
+  const userAgent = opts.userAgent || 'curl/7.81.0'
+  const headers = [
+    `${method} ${randomUrl()} HTTP/1.1`,
+    `Host: ${HOST}`,
+    `User-Agent: ${userAgent}`,
+    'Content-Type: octet/stream',
+    'Accept: */*',
+  ]
+  if (opts.contentLength) {
+    headers.push(`Content-Length: ${opts.contentLength}`)
+  }
+  headers.push(SEP)
+  return headers
+}
 const html = `<!DOCTYPE html>
 <html>
   <head>
@@ -42,7 +60,8 @@ const fakeHeader = {
    * @param {Buffer} data 
    */
   serialize: (data) => {
-    return Buffer.concat([REQUEST_HEADERS_BUFFER, data])
+    const headers = REQUEST_HEADERS({ contentLength: data.byteLength })
+    return Buffer.concat([Buffer.from(headers.join(SEP), 'utf-8'), data])
   },
   /**
    * @param {Buffer} data 

@@ -3,6 +3,8 @@ const { createProxyServer } = require('@mutagen-d/node-proxy-server')
 const { Defer } = require('./tools/defer');
 const config = require('./config');
 const { SocketBase } = require('./tools/socket-base');
+const { EncryptedStream } = require('./tools/encrypted-stream');
+const { aes } = require('./tools/aes');
 
 const port = config.localPort;
 const time = () => new Date().toISOString();
@@ -28,7 +30,11 @@ const server = createProxyServer({
     await defer.promise
     console.log(time(), `${options.dstHost}:${options.dstPort} +${Date.now() - timestamp}ms`)
     socket.detach()
-    return socket.socket;
+    return new EncryptedStream(socket.socket, {
+      encode: aes.encode,
+      decode: aes.decode,
+      encrypted: true,
+    })
   }
 })
 

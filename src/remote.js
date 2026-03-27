@@ -2,6 +2,8 @@ const net = require('net')
 const config = require('./config');
 const { SocketBase } = require('./tools/socket-base');
 const { fakeHeader } = require('./tools/fake-header');
+const { EncryptedStream } = require('./tools/encrypted-stream');
+const { aes } = require('./tools/aes');
 
 const port = config.remotePort;
 const time = () => new Date().toISOString()
@@ -33,7 +35,13 @@ server.on('connection', (socket) => {
     s.on('error', (error) => {
       callback(error && (error.message || error))
     })
-    s.pipe(sock.socket).pipe(s)
+    const stream = new EncryptedStream(sock.socket, {
+      encode: aes.encode,
+      decode: aes.decode,
+      encrypted: true,
+    })
+    s.pipe(stream).pipe(s)
   })
 })
 server.listen(port, '0.0.0.0', () => console.log(time(), 'server listening port', port))
+server.on('error', (err) => console.log(time(), 'server error', err))
